@@ -37,9 +37,11 @@ During development or in scenarios without a live AWS connection, the frontend u
 ## 🔄 Data Lifecycle
 
 1. **Extraction (Backend)**: Analyzer Lambda parses raw text -> Structured Job JSON.
-2. **Synchronization (n8n)**: Orchestration workflows sync third-party board data into the central DynamoDB store.
+2. **Synchronization (n8n)**: 
+   - `job_scraper.json`: Orchestrates third-party scraping into DynamoDB.
+   - `match_notification.json`: Triggers SES alerts for high-fit roles (≥ 85%).
 3. **Scoring (Backend)**: Scoring engine calculates `fit_score` based on the `UserProfile` stored in DynamoDB.
-4. **Visualization (Frontend)**: Next.js fetches jobs and filters them locally or via server-side props for performance.
+4. **Visualization (Frontend)**: Next.js fetches jobs and provides a **Direct Apply** path for high-fit roles to maintain speed and performance.
 5. **Geospatial Sync**: Coordinates (`lat`, `lng`) are injected during analysis for the **Job Intelligence Map**.
 
 ## 🛡️ Security Protocol

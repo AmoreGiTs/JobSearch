@@ -1,0 +1,95 @@
+{
+    "nodes": [
+        {
+            "parameters": {
+                "rule": "0 18 * * *",
+                "options": {}
+            },
+            "id": "match-timer-id",
+            "name": "Evening Digest Trigger",
+            "type": "n8n-nodes-base.cron",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "scan",
+                "table": "ai-job-agent-structured-jobs-dev",
+                "filters": {
+                    "conditions": [
+                        {
+                            "key": "fit_score",
+                            "operator": "th",
+                            "value": 85
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "dynamo-fetch-id",
+            "name": "Get High-Fit Jobs",
+            "type": "n8n-nodes-base.awsDynamoDb",
+            "typeVersion": 1,
+            "position": [
+                450,
+                300
+            ],
+            "credentials": {
+                "awsDynamoDbApi": {
+                    "id": "your-credentials-id",
+                    "name": "AWS Account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "fromEmail": "notifications@jobsearch.ai",
+                "toEmail": "user@example.com",
+                "subject": "🚀 New High-Fit Job Matches Found!",
+                "html": "<h1>Your Daily Job Matches</h1><p>We found new roles that match your profile with >85% accuracy.</p>",
+                "options": {}
+            },
+            "id": "ses-send-id",
+            "name": "Send SES Email",
+            "type": "n8n-nodes-base.awsSes",
+            "typeVersion": 1,
+            "position": [
+                650,
+                300
+            ],
+            "credentials": {
+                "awsSesApi": {
+                    "id": "your-ses-credentials-id",
+                    "name": "AWS SES"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Evening Digest Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Get High-Fit Jobs",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get High-Fit Jobs": {
+            "main": [
+                [
+                    {
+                        "node": "Send SES Email",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

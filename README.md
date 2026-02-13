@@ -9,7 +9,7 @@ The ecosystem operates as a distributed, event-driven pipeline:
 ```mermaid
 graph TD
     subgraph "Data Acquisition"
-        A1[n8n Workflows] -->|Scraped Content| B[(DynamoDB)]
+        A1[n8n Orchestration] -->|Scrapers & Notifications| B[(DynamoDB)]
         A2[Python Scrapers] -->|Raw HTML| B
     end
 
