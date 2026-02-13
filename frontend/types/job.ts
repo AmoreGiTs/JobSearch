@@ -23,6 +23,14 @@ export interface Job {
     tech_stack_summary: string;
     fit_score: number;
     analyzed_at: string;
+    posted_at: string;
+    lat?: number;
+    lng?: number;
+    description?: string;
+    company_logo?: string;
+    match_reasons?: string[];
+    responsibilities?: string[];
+    benefits?: string[];
 }
 
 export interface UserProfile {

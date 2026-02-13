@@ -2,11 +2,11 @@
 
 import { Job } from '@/types/job';
 import { cn, formatCurrency } from '@/lib/utils';
+import { motion } from 'framer-motion';
 import {
     Building2,
     MapPin,
     Briefcase,
-    CheckCircle2,
     Clock,
     ChevronRight,
     ShieldCheck,
@@ -16,38 +16,50 @@ import {
 interface JobCardProps {
     job: Job;
     onClick?: (job: Job) => void;
+    index?: number;
 }
 
-export function JobCard({ job, onClick }: JobCardProps) {
+export function JobCard({ job, onClick, index = 0 }: JobCardProps) {
     const isHighFit = job.fit_score >= 85;
 
     return (
-        <div
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
             onClick={() => onClick?.(job)}
             className={cn(
-                "group relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:shadow-lg transition-all cursor-pointer",
+                "group relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:shadow-xl transition-all cursor-pointer",
                 isHighFit && "border-blue-500/50 ring-1 ring-blue-500/20"
             )}
         >
             {isHighFit && (
-                <div className="absolute -top-3 left-4 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                <div className="absolute -top-3 left-4 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm z-10">
                     <Zap size={10} fill="currentColor" />
                     HIGH FIT
                 </div>
             )}
 
             <div className="flex justify-between items-start mb-4">
-                <div>
-                    <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-500 transition-colors">
-                        {job.job_title}
-                    </h3>
-                    <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400 mt-1">
-                        <Building2 size={16} />
-                        <span className="text-sm font-medium">{job.company_name || 'Anonymous'}</span>
+                <div className="flex gap-4">
+                    {job.company_logo && (
+                        <div className="w-12 h-12 rounded-lg bg-zinc-100 dark:bg-zinc-800 overflow-hidden flex-shrink-0 border border-zinc-200 dark:border-zinc-800">
+                            <img src={job.company_logo} alt={job.company_name || 'Logo'} className="w-full h-full object-cover" />
+                        </div>
+                    )}
+                    <div>
+                        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-500 transition-colors">
+                            {job.job_title}
+                        </h3>
+                        <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400 mt-1">
+                            <Building2 size={16} />
+                            <span className="text-sm font-medium">{job.company_name || 'Anonymous'}</span>
+                        </div>
                     </div>
                 </div>
                 <div className={cn(
-                    "px-3 py-1 rounded-full text-xs font-bold",
+                    "px-3 py-1 rounded-full text-xs font-bold shrink-0",
                     job.fit_score >= 80 ? "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400" :
                         job.fit_score >= 60 ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400" :
                             "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
@@ -59,13 +71,13 @@ export function JobCard({ job, onClick }: JobCardProps) {
             <div className="grid grid-cols-2 gap-y-3 mb-4">
                 <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
                     <MapPin size={16} />
-                    <span className="text-sm">{job.location} ({job.remote_policy})</span>
+                    <span className="text-sm truncate">{job.location}</span>
                 </div>
                 <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
                     <Briefcase size={16} />
-                    <span className="text-sm">{job.years_of_experience.raw_text || 'Exp req. n/a'}</span>
+                    <span className="text-sm">{job.years_of_experience?.raw_text || 'Exp req. n/a'}</span>
                 </div>
-                {job.salary_range.min && (
+                {job.salary_range?.min && (
                     <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
                         <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">
                             {formatCurrency(job.salary_range.min, job.salary_range.currency)}
@@ -85,7 +97,7 @@ export function JobCard({ job, onClick }: JobCardProps) {
                 {job.required_skills.slice(0, 4).map(skill => (
                     <span
                         key={skill}
-                        className="px-2 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-[10px] font-bold rounded uppercase tracking-tight"
+                        className="px-2 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-[10px] font-bold rounded uppercase tracking-tight transition-colors group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 group-hover:text-blue-600 dark:group-hover:text-blue-400"
                     >
                         {skill}
                     </span>
@@ -105,6 +117,7 @@ export function JobCard({ job, onClick }: JobCardProps) {
                     <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                 </button>
             </div>
-        </div>
+        </motion.div>
     );
 }
+
