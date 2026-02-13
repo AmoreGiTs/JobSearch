@@ -1,96 +1,105 @@
-# AI Job Search Automation Agent MVP
+# JobSearch: AI-Powered Career Automation Engine
 
-A modular, serverless AI agent that automates job discovery, analysis, scoring, and personalized notifications. Built on AWS with Python, Lambda, Bedrock (Claude 3), and Terraform.
+A high-performance, enterprise-grade AI agent ecosystem designed to automate the entire job search lifecycle. From intelligent scraping and LLM-based analysis to geospatial visualization and automated notifications.
 
-## 🏗️ Architecture
+## 🏗️ System Architecture
 
-The system follows a 4-stage intelligent pipeline:
+The ecosystem operates as a distributed, event-driven pipeline:
 
 ```mermaid
-flowchart TD
-    subgraph "1. Acquisition"
-        A[Scraper Agent<br/>AWS Lambda] -->|Raw Text| B[(RawJobs<br/>DynamoDB)]
+graph TD
+    subgraph "Data Acquisition"
+        A1[n8n Workflows] -->|Scraped Content| B[(DynamoDB)]
+        A2[Python Scrapers] -->|Raw HTML| B
     end
 
-    subgraph "2. Analysis"
-        B --> C[Analyzer Agent<br/>AWS Lambda]
-        C -- Claude 3 --> D[(StructuredJobs<br/>DynamoDB)]
+    subgraph "AI Intelligence"
+        B --> C[Analyzer Service]
+        C --- C1[AWS Bedrock / Claude 3]
+        C1 -->|Structured JSON| D[(Verified Jobs)]
     end
 
-    subgraph "3. Intelligence"
-        D --> E[Scoring Engine<br/>AWS Lambda]
-        F[(User Profile<br/>DynamoDB)] --> E
-        E -->|Fit Score > 70| G[High-Fit Jobs]
+    subgraph "Scoring & Matching"
+        D --> E[Scoring Engine]
+        U[User Profile] --> E
+        E -->|High Match| F[SES Notifications]
     end
 
-    subgraph "4. Outreach"
-        G --> H[Notification Service<br/>AWS Lambda]
-        H -- SES --> I[Daily Email Digest]
+    subgraph "Control Plane"
+        CP[Next.js Dashboard] <-->|Rest API / Mock| D
+        CP <-->|Mapbox GL| G[Geospatial Intelligence]
     end
 ```
 
-## 🚀 Features
+## 💎 Key Features
 
-- **Automated Scraping**: Fetch job postings from multiple sources (simulated MVP).
-- **LLM Extraction**: Parse unstructured job descriptions into strict JSON using AWS Bedrock.
-- **Personalized Scoring**: Match jobs against your skills, experience, and remote preferences.
-- **Daily Digest**: Receive a curated HTML report of top job matches.
-- **Infrastructure as Code**: Full AWS deployment via Terraform.
+- **Geospatial Intelligence Map**: Hardware-accelerated visualization of job markets using Mapbox GL.
+- **LLM-Powered Analysis**: Deep extraction of salary ranges, remote policies, and skill requirements from unstructured postings.
+- **n8n Orchestration**: Managed workflows for cross-platform scraping and data synchronization.
+- **Premium UI/UX**: High-fidelity dashboard with skeleton loading, motion-designed transitions, and unified sidebar management.
+- **Enterprise Security**: Least-privilege IAM roles, secure API patterns, and comprehensive input sanitization.
 
 ## 🛠️ Tech Stack
 
-- **Compute**: AWS Lambda (Python 3.11)
-- **Database**: Amazon DynamoDB
-- **AI/LLM**: AWS Bedrock (Claude 3 Sonnet/Haiku)
-- **Notifications**: Amazon SES
-- **IaC**: Terraform
-- **Security**: IAM Least Privilege
+### Frontend (Control Plane)
+- **Framework**: Next.js 15
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Visualization**: Mapbox GL JS
+- **Icons**: Lucide React
 
-## 📦 Project Structure
+### Backend (Intelligence Layer)
+- **Compute**: AWS Lambda (Python 3.11)
+- **AI**: AWS Bedrock (Claude 3.5 Sonnet)
+- **Database**: DynamoDB (GSIs for high-speed indexing)
+- **Orchestration**: n8n (Docker-based)
+
+### Infrastructure (Cloud Native)
+- **IaC**: Terraform
+- **CI/CD**: Git-based automation
+- **Networking**: VPC & Secure API endpoints
+
+## 📂 Project Structure
 
 ```bash
-ai-job-agent-mvp/
-├── infrastructure/terraform/  # Terraform IaC definitions
-├── services/                  # Lambda functions
-│   ├── scraper/               # Job scraping logic
-│   ├── analyzer/              # LLM extraction logic
-│   ├── scoring/               # Matching engine
-│   └── notifications/         # Email service
-├── scripts/                   # Utility scripts (e.g., seeding)
-└── requirements.txt           # Python dependencies
+JobSearch/
+├── frontend/               # Next.js Application (React, Tailwind, Framer Motion)
+├── services/               # Modular Lambda services (Analysis, Scoring, Notifications)
+├── infrastructure/         # Terraform configurations for AWS
+├── n8n/                    # Orchestration workflows and configuration
+├── scripts/                # Seeding and maintenance utilities
+└── docs/                   # Exhaustive technical documentation
 ```
 
-## ⚡ Deployment
+## ⚡ Quick Start
 
-1. **Prerequisites**:
-   - AWS CLI configured
-   - Terraform installed
-   - AWS Bedrock model access enabled (Claude 3)
+### 1. Environment Configuration
+Copy the sample environment files and fill in your AWS and Mapbox credentials:
+```bash
+cp .env.example .env.local
+```
 
-2. **Initialize & Apply Terraform**:
-   ```bash
-   cd infrastructure/terraform
-   terraform init
-   terraform apply
-   ```
+### 2. Infrastructure Deployment
+Deploy the serverless backend via Terraform:
+```bash
+cd infrastructure/terraform
+terraform init
+terraform apply
+```
 
-3. **Seed User Profile**:
-   ```bash
-   pythonscripts/seed_user.py
-   ```
+### 3. Frontend Development
+Launch the high-fidelity UI:
+```bash
+cd frontend
+pnpm install
+pnpm dev
+```
+Access the dashboard at `http://localhost:3000`.
 
-4. **Run the Frontend**:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) to view your dashboard.
+## 🔒 Security & Performance
+- **Zero-Wait UI**: Integrated skeleton loaders for all data-heavy views.
+- **Validated Input**: Strict TypeScript interfaces and Zod-based (planned) validation.
+- **Performance**: Optimized React render cycles and Mapbox tile caching.
 
-## 🏁 How the Pipeline Works
-
-1. **Scraper Agent**: Daily fetch (EventBridge) -> Raw Text in DynamoDB.
-2. **Analyzer Agent**: Claude 3 Analysis (Bedrock) -> Structured JSON in DynamoDB.
-3. **Scoring Engine**: Profile Matching -> Fit Score (0-100).
-4. **Notification Service**: If Score > 70 -> Email Digest via SES.
-5. **Dashboard**: View high-fit matches and provide feedback (Like/Reject).
+## 📜 License
+Distributed under the MIT License. See `LICENSE` for more information.
