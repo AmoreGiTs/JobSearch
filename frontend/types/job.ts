@@ -24,6 +24,7 @@ export interface Job {
     fit_score: number;
     analyzed_at: string;
     posted_at: string;
+    apply_url?: string;
     lat?: number;
     lng?: number;
     description?: string;

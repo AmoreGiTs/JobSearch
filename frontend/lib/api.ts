@@ -2,7 +2,17 @@ import { Job, UserProfile, Application, ApplicationStatus, JobFilters, UserSetti
 
 // Basic input sanitization simulation for security
 const sanitizeInput = (str: string) => {
-    return str.replace(/[<>]/g, '').trim();
+    if (!str) return '';
+    return str
+        .replace(/[<>&"'\/]/g, (s) => ({
+            '<': '&lt;',
+            '>': '&gt;',
+            '&': '&amp;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;'
+        })[s] || s)
+        .trim();
 };
 
 export const MOCK_JOBS: Job[] = [
@@ -50,6 +60,7 @@ export const MOCK_JOBS: Job[] = [
         tech_stack_summary: 'TypeScript, React, Node.js, AWS, Next.js',
         analyzed_at: '2026-02-12T10:00:00Z',
         posted_at: '2026-02-12T09:00:00Z',
+        apply_url: 'https://careers.techflow.io/jobs/senior-fullstack',
         lat: 37.7749,
         lng: -122.4194
     },
@@ -96,6 +107,7 @@ export const MOCK_JOBS: Job[] = [
         tech_stack_summary: 'K8s, Terraform, Go, Python, Security',
         analyzed_at: '2026-02-12T14:00:00Z',
         posted_at: '2026-02-12T12:00:00Z',
+        apply_url: 'https://nexuscloud.engineering/apply/backend-architect',
         lat: 40.7128,
         lng: -74.0060
     },
@@ -136,6 +148,7 @@ export const MOCK_JOBS: Job[] = [
         tech_stack_summary: 'React, Tailwind, Framer Motion, accessibility',
         analyzed_at: '2026-02-13T09:00:00Z',
         posted_at: '2026-02-13T08:30:00Z',
+        apply_url: 'https://vibrant.creators/careers/lead-ui-ux',
         lat: -1.2921,
         lng: 36.8219
     }

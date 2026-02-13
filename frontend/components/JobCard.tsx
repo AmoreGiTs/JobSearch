@@ -10,7 +10,9 @@ import {
     Clock,
     ChevronRight,
     ShieldCheck,
-    Zap
+    Zap,
+    ExternalLink,
+    Bookmark
 } from 'lucide-react';
 
 interface JobCardProps {
@@ -44,7 +46,7 @@ export function JobCard({ job, onClick, index = 0 }: JobCardProps) {
             <div className="flex justify-between items-start mb-4">
                 <div className="flex gap-4">
                     {job.company_logo && (
-                        <div className="w-12 h-12 rounded-lg bg-zinc-100 dark:bg-zinc-800 overflow-hidden flex-shrink-0 border border-zinc-200 dark:border-zinc-800">
+                        <div className="w-12 h-12 rounded-lg bg-zinc-100 dark:bg-zinc-800 overflow-hidden shrink-0 border border-zinc-200 dark:border-zinc-800">
                             <img src={job.company_logo} alt={job.company_name || 'Logo'} className="w-full h-full object-cover" />
                         </div>
                     )}
@@ -108,14 +110,49 @@ export function JobCard({ job, onClick, index = 0 }: JobCardProps) {
             </div>
 
             <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
-                <div className="flex items-center gap-1 text-zinc-400 text-[10px]">
-                    <Clock size={12} />
-                    <span>Analyzed {new Date(job.analyzed_at).toLocaleDateString()}</span>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            // Simulated save
+                        }}
+                        className="p-1.5 text-zinc-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                        title="Save for later"
+                    >
+                        <Bookmark size={18} />
+                    </button>
+                    <div className="flex flex-col">
+                        <span className="text-[10px] text-zinc-400 font-medium">Analyzed {new Date(job.analyzed_at).toLocaleDateString()}</span>
+                    </div>
                 </div>
-                <button className="text-blue-600 dark:text-blue-400 text-xs font-bold flex items-center gap-1 group/btn">
-                    View Details
-                    <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onClick?.(job);
+                        }}
+                        className="text-zinc-500 dark:text-zinc-400 text-xs font-bold px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+                    >
+                        Details
+                    </button>
+                    {job.apply_url && (
+                        <a
+                            href={job.apply_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className={cn(
+                                "flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95",
+                                isHighFit
+                                    ? "bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20"
+                                    : "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200"
+                            )}
+                        >
+                            Apply Direct
+                            <ExternalLink size={14} />
+                        </a>
+                    )}
+                </div>
             </div>
         </motion.div>
     );

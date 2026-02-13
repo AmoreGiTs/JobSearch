@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AI Job Agent | Dashboard",
   description: "Automated AI job search assistant",
+  other: {
+    "content-security-policy": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.mapbox.com https://events.mapbox.com;",
+  },
 };
 
 export default function RootLayout({
