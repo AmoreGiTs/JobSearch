@@ -62,13 +62,13 @@ export default function Dashboard() {
           <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
             {loading ? <Skeleton className="h-9 w-64" /> : `Welcome back, ${profile?.name?.split(' ')[0]}`}
           </h1>
-          <p className="text-zinc-500 mt-1 font-medium">
+          <div className="text-zinc-500 mt-1 font-medium">
             {loading ? (
               <Skeleton className="h-4 w-96 mt-2" />
             ) : (
               <>Your intelligence engine has identified <span className="text-blue-600 dark:text-blue-400 font-bold">{jobs.length} new opportunities</span> since yesterday.</>
             )}
-          </p>
+          </div>
         </div>
         {!loading && (
           <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm shadow-sm flex items-center gap-2 transition-all active:scale-95 self-start md:self-auto">

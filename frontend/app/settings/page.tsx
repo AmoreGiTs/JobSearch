@@ -79,9 +79,9 @@ export default function SettingsPage() {
                     <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight mb-2">
                         {loading ? <Skeleton className="h-9 w-48" /> : 'Settings'}
                     </h1>
-                    <p className="text-zinc-500">
+                    <div className="text-zinc-500">
                         {loading ? <Skeleton className="h-4 w-72" /> : 'Configure your account preferences and notifications'}
-                    </p>
+                    </div>
                 </div>
                 {saving && (
                     <div className="flex items-center gap-2 text-blue-600 text-xs font-bold uppercase tracking-widest animate-pulse">
