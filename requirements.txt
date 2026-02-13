@@ -1,0 +1,4 @@
+boto3==1.34.40
+aws-lambda-powertools==2.32.0   # For structured logging, tracing
+pydantic==2.6.1                # For strict data models (future)
+requests==2.31.0               # For HTTP requests
